@@ -1,0 +1,9 @@
+<tr>
+    <th>title</th>
+    <th>prix</th>
+    <th>commission</th>
+    <th>partenaire</th>
+    <th>contrat</th>
+    <th>categorie</th>
+    <th>actions</th>
+</tr>
