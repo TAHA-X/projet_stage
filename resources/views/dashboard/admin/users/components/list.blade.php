@@ -36,6 +36,8 @@
                    @elseif($user->contrat->type=="1")
                     <div class="badge badge-info">commission</div> 
                     <div class="badge badge-warning">{{$user->contrat->commission}} %</div>
+                   @elseif($user->contrat->type=="2")
+                       <div class="badge badge-secondary">commission variable</div>
                    @endif
                </div>
             @else

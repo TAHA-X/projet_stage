@@ -4,7 +4,11 @@
         <td>{{ $produit->title }}</td>
         <td>{{ $produit->prix }}</td>
         <td>
-            <div class="badge badge-dark">pas variable</div>
+            @if($produit->partenaire->contrat->type=="2")
+               {{ $produit->taux }}
+            @else
+              <div class="badge badge-dark">pas variable</div>
+            @endif
         </td>
         <td>{{ $produit->partenaire->fname}} {{ $produit->partenaire->lname}}</td>
         <td>
@@ -13,8 +17,10 @@
                    <div class="badge badge-info">abonnement</div> 
                    <div class="badge badge-warning">{{$produit->partenaire->contrat->periode}} mois | {{$produit->partenaire->contrat->montant}} dh</div>
                 @elseif($produit->partenaire->contrat->type=="1")
-                 <div class="badge badge-info">commission</div> 
-                 <div class="badge badge-warning">{{$produit->partenaire->contrat->commission}} %</div>
+                   <div class="badge badge-info">commission</div> 
+                   <div class="badge badge-warning">{{$produit->partenaire->contrat->commission}} %</div>
+                @else
+                    <div class="badge badge-secondary">commission variable</div> 
                 @endif
             </div>
         </td>

@@ -34,8 +34,12 @@
             {{$contrat->created_at}} 
         </td>
         <td>
-            <a class="btn btn-danger" onclick="return confirm('voulez vous vraiment supprimer cette contrat ?')" href="{{route('admin.contrats.delete',$contrat->id)}}"><i class="bi bi-trash3-fill"></i></a>
-            <a class="btn btn-primary"  href="{{route('admin.contrats.edit',$contrat->id)}}"><i class="bi bi-pen"></i></a>
+          @if($contrat->type!=2)
+          <a class="btn btn-danger" onclick="return confirm('voulez vous vraiment supprimer cette contrat ?')" href="{{route('admin.contrats.delete',$contrat->id)}}"><i class="bi bi-trash3-fill"></i></a>
+          <a class="btn btn-primary"  href="{{route('admin.contrats.edit',$contrat->id)}}"><i class="bi bi-pen"></i></a>
+          @else
+            <div class="badge badge-dark"> </div>
+          @endif
         </td>
     </tr>
 @endforeach

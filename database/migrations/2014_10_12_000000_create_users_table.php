@@ -20,10 +20,14 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->bigInteger("points")->nullable();
+            $table->unsignedBigInteger("type_point")->nullable();
+            $table->foreign("type_point")->references("id")->on("gestion_points")->cascadeOnDelete();
             $table->unsignedBigInteger("contrat_id")->nullable();
             $table->foreign("contrat_id")->references("id")->on("contrats")->cascadeOnDelete();
             $table->unsignedBigInteger("categorie_id")->nullable();
             $table->foreign("categorie_id")->references("id")->on("categories")->cascadeOnDelete();
+            $table->unsignedBigInteger("partenaire_id")->nullable();
+            $table->foreign("partenaire_id")->references("id")->on("users");
             $table->enum("level_id",[1,2,3,4])->default(2);
             $table->rememberToken();
             $table->timestamps();

@@ -14,7 +14,7 @@ class Categorie extends Model
         return $this->belongsTo(Categorie::class,"id_parent");
     }
 
-    public function users(){
+    public function partenaires(){
         return $this->hasMany(User::class,"categorie_id");
     }
 }

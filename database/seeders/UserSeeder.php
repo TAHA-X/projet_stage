@@ -14,14 +14,14 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $responsable = new User();
-        $responsable->fname = "responsable";
-        $responsable->lname = "test";
-        $responsable->email = "responsable@gmail.com";
-        $responsable->password = Hash::make("12345678");
-        $responsable->phone = 678965643;
-        $responsable->level_id = 1;
-        $responsable->save();
+        // $responsable = new User();
+        // $responsable->fname = "responsable";
+        // $responsable->lname = "test";
+        // $responsable->email = "responsable@gmail.com";
+        // $responsable->password = Hash::make("12345678");
+        // $responsable->phone = 678965643;
+        // $responsable->level_id = 1;
+        // $responsable->save();
 
         $admin = new User();
         $admin->fname = "admin";
@@ -29,7 +29,7 @@ class UserSeeder extends Seeder
         $admin->email = "admin@gmail.com";
         $admin->password = Hash::make("12345678");
         $admin->phone = 678965643;
-        $admin->level_id = 2;
+        $admin->level_id = 1;
         $admin->save();
 
         // $partenaire = new User();
@@ -41,13 +41,13 @@ class UserSeeder extends Seeder
         // $partenaire->level_id = 3;
         // $partenaire->save();
 
-        $client = new User();
-        $client->fname = "client";
-        $client->lname = "test";
-        $client->email = "client@gmail.com";
-        $client->password = Hash::make("12345678");
-        $client->phone = 678965643;
-        $client->level_id = 4;
-        $client->save();
+        // $client = new User();
+        // $client->fname = "client";
+        // $client->lname = "test";
+        // $client->email = "client@gmail.com";
+        // $client->password = Hash::make("12345678");
+        // $client->phone = 678965643;
+        // $client->level_id = 4;
+        // $client->save();
     }
 }

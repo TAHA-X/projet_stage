@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Contrat;
 use Illuminate\Validation\Rule;
 use App\Models\Categorie;
+use App\Models\GestionPoint;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -31,8 +32,11 @@ class UserController extends Controller
      */
     public function create()
     {
+        $types_points = GestionPoint::all();
         $categories = Categorie::all();
-        return view("dashboard.admin.users.pages.add",compact("categories"));
+        $contrats = Contrat::all();
+        $partenaires = User::where("level_id",3)->get();
+        return view("dashboard.admin.users.pages.add",compact("categories","contrats","partenaires","types_points"));
     }
 
     /**
@@ -47,14 +51,22 @@ class UserController extends Controller
             "phone"=>"required|numeric",
             "level_id"=>"required|numeric",
         ]);
-        $id_contrat = null;
+        $id_contrat = Contrat::where("type",3)->first()->id;
         if($request->id_contrat){
             $id_contrat= $request->id_contrat;
         }
         $categorie_id = null;
-        if($request->categorie_id){
+        if($request->categorie_id!=null){
             $categorie_id= $request->categorie_id;
-        }        
+        } 
+        $type_point = null;
+        if($request->type_point){
+            $type_point = $request->type_point;
+        } 
+        $partenaire_id = null;
+        if($request->partenaire_id){
+            $partenaire_id= $request->partenaire_id;
+        }      
         $user = new User();
         $user->fname = $request->fname;
         $user->lname = $request->lname;
@@ -64,6 +76,8 @@ class UserController extends Controller
         $user->level_id = $request->level_id;
         $user->contrat_id = $id_contrat;
         $user->categorie_id = $categorie_id;
+        $user->partenaire_id = $partenaire_id;
+        $user->type_point = $type_point;
         $user->save();
         return redirect()->route("admin.users.index")->with("message","user est ajouté avec succé");
     }
@@ -75,6 +89,10 @@ class UserController extends Controller
     {
         $user = User::where("id",$id)->first();
         if($user){
+            $clients = User::where("partenaire_id",$id)->get();
+            foreach($clients as $client){
+                $client->delete();
+            }
             $user->delete(); 
             return redirect()->route("admin.users.index")->with("message","user est supprimé avec succé");
         }
@@ -93,10 +111,13 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
+        $types_points = GestionPoint::all();
         $user = User::where("id",$id)->first();
         $contrats = Contrat::all();
+        $categories = Categorie::all();
+        $partenaires = User::where("level_id",3)->get();
         if($user){
-            return view("dashboard.admin.users.pages.edit",compact("user","contrats"));
+            return view("dashboard.admin.users.pages.edit",compact("user","contrats","categories","partenaires","types_points"));
         }
         else{
             return redirect()->route("admin.users.index");
@@ -117,13 +138,21 @@ class UserController extends Controller
         ]);
         $user = User::where("id",$id)->first();
         if($user){
-            $id_contrat = null;
+            $id_contrat = Contrat::where("type",3)->first()->id;
             if($request->id_contrat){
                 $id_contrat= $request->id_contrat;
             }
-            $categorie_id = null;
+            $categorie_id = $user->categorie_id;
             if($request->categorie_id){
                 $categorie_id= $request->categorie_id;
+            } 
+            $type_point = null;
+            if($request->type_point){
+                $type_point = $request->type_point;
+            } 
+            $partenaire_id = $user->partenaire_id;
+            if($request->partenaire_id){
+                $partenaire_id= $request->partenaire_id;
             }        
             $user->categorie_id = $categorie_id;
             $user->contrat_id = $id_contrat;
@@ -131,6 +160,8 @@ class UserController extends Controller
             $user->lname = $request->lname;
             $user->email = $request->email;
             $password = $user->password;
+            $user->partenaire_id = $partenaire_id;
+            $user->type_point = $type_point;
             if($request->password){
                 $password = Hash::make($request->password);
             }
@@ -150,8 +181,9 @@ class UserController extends Controller
         return response()->json($type);
     }
 
-    public function contrat_type_partenaire2($id){
-        $contrats = Contrat::where("type",$id)->get();
+    public function contrat_type_partenaire2($type){
+        $contrats = Contrat::where("type",$type)->get();
+        // return $id;
         return response()->json($contrats);
     }
 

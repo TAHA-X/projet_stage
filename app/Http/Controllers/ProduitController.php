@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Produit;
 use Illuminate\Http\Request;
-use App\Models\Contrat;
+use App\Models\Categorie;
 use App\Models\User;
+use App\Models\Contrat;
 
 class ProduitController extends Controller
 {
@@ -26,8 +27,9 @@ class ProduitController extends Controller
      */
     public function create()
     {
+        $categories = Categorie::all();
         $partenaires = User::where("level_id",3)->get();
-        return view("dashboard.admin.produits.pages.add",compact("partenaires"));
+        return view("dashboard.admin.produits.pages.add",compact("partenaires","categories"));
     }
 
     /**
@@ -40,13 +42,14 @@ class ProduitController extends Controller
             "title" => "required",
             "id_partenaire"=>"required|numeric",
             "prix"=>"required|numeric",
+            "id_categorie"=>"required|numeric"
         ]);
         $produit = new produit();
         $produit->title = $request->title;
         $produit->id_partenaire = $request->id_partenaire;
         $produit->prix = $request->prix;
-        if($request->taux){
-            $produit->taux = $request->taux;
+        if($request->commission){
+            $produit->taux = $request->commission;
         }
         $produit->save();
         return redirect()->route("admin.produits.index")->with("message", "produit est ajouté avec succé");
@@ -76,10 +79,11 @@ class ProduitController extends Controller
      */
     public function edit(string $id)
     {
+        $categories = Categorie::all();
         $produit = produit::where("id", $id)->first();
         $partenaires = User::where("level_id",3)->get();
         if ($produit) {
-            return view("dashboard.admin.produits.pages.edit", compact("produit","partenaires"));
+            return view("dashboard.admin.produits.pages.edit", compact("produit","partenaires","categories"));
         } else {
             return redirect()->route("admin.produits.index");
         }
@@ -100,13 +104,26 @@ class ProduitController extends Controller
             $produit->title = $request->title;
             $produit->id_partenaire = $request->id_partenaire;
             $produit->prix = $request->prix;
-            if($request->taux){
-                $produit->taux = $request->taux;
+            if($request->commission){
+                $produit->taux = $request->commission;
             }
             $produit->save();
             return redirect()->route("admin.produits.index")->with("message", "produit est modifié avec succé");
         } else {
             return redirect()->route("admin.produits.index");
         }
-}
+    }
+       
+    public function categorie_partenaire($id){
+          $categorie = Categorie::where("id",$id)->first();
+          $partenaires = $categorie->partenaires;
+          return response()->json($partenaires);
+    }
+
+
+    public function type_contrat_partenaire($id){
+           $contrat_type = User::where("id",$id)->first()->contrat->type;
+           return response()->json($contrat_type);
+    }
+
 }

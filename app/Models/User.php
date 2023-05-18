@@ -12,6 +12,8 @@ use App\Models\Reseau;
 use App\Models\Invitation;
 use App\Models\Produit;
 use App\Models\Categorie;
+use App\Models\System;
+use App\Models\GestionPoint;
 
 class User extends Authenticatable
 {
@@ -22,7 +24,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = ['id','fname','lname','email','password','phone','level_id','points','contrat_id','categorie_id'];
+    protected $fillable = ['id','fname','lname','email','password','phone','level_id','points','contrat_id','categorie_id','partenaire_id','type_point'];
     public function contrat(){ 
         return $this->belongsTo(Contrat::class,"contrat_id");
     }
@@ -66,4 +68,11 @@ class User extends Authenticatable
         return $this->belongsTo(Categorie::class,"categorie_id");
     }
 
+    public function system(){
+        return $this->hasOne(System::class,"id_partenaire");
+    }
+
+    public function point(){
+        return $this->belongsTo(GestionPoint::class,"type_point");
+    }
 }

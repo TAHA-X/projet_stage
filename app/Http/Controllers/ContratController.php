@@ -91,11 +91,12 @@ class ContratController extends Controller
      */
     public function update(Request $request, string $id)
     {
+
         $this->validate($request, [
             "type" => "required|numeric",
         ]);
         $contrat = contrat::where("id", $id)->first();
-        if ($contrat) {
+        if ($contrat || $contrat->type!==2) {
             $contrat->type = $request->type;
             if($request->type==0){
                  $contrat->periode = $request->periode;
@@ -119,10 +120,10 @@ class ContratController extends Controller
             $type = 0;
             return response()->json($type);
         }
-         if($id==1){
+        if($id==1){
             $type = 1;
             return response()->json($type);     
-    }
+        }
     }
     /**
      * Remove the specified resource from storage.

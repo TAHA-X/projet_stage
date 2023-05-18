@@ -18,6 +18,7 @@
              <option disabled selected>choisir le type</option>
               <option value="0">abonnement</option>
               <option value="1">commission</option>
+              <option value="2">commission(variable)</option>
           </select>
           @error("type")
                <span class="mt-2 text-danger">{{$message}}</span>
